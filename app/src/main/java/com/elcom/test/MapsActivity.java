@@ -173,6 +173,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             public void onResult(PlaceBuffer places) {
                                 if (places.getCount() == 1) {
                                     //Do the things here on Click.....
+                                    LatLng latLng =places.get(0).getLatLng();
+
+                                    MarkerOptions markerOptions = new MarkerOptions();
+                                    markerOptions.position(latLng);
+                                    markerOptions.title(places.get(0).getName().toString());
+                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+                                    mCurrLocationMarker = mMap.addMarker(markerOptions);
+
+                                    //move map camera
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                                     Toast.makeText(getApplicationContext(), String.valueOf(places.get(0).getLatLng()), Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), Constants.SOMETHING_WENT_WRONG, Toast.LENGTH_SHORT).show();
