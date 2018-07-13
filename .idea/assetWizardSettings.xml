@@ -81,7 +81,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/E:/AndroidStudio/AD/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_gps_fixed_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/E:/AndroidStudio/AD/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_adjust_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -92,7 +92,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="f44336" />
-                            <entry key="outputName" value="ic_gps_location" />
+                            <entry key="outputName" value="ic_go" />
                             <entry key="sourceFile" value="C:\Users\nsh96" />
                           </map>
                         </option>

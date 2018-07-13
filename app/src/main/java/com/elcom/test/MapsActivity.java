@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +83,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationListener locationListener;
     private ImageButton btnSearch;
     private EditText txtSearch;
+    private FloatingActionButton fab_go;
+    private LinearLayout layout_go, fab_go_point;
+    private Button btn_ok_go;
+    private static final String TAG = "MapsActivity";
 
     SupportMapFragment mapFrag;
     LocationRequest mLocationRequest;
@@ -114,16 +120,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         buildGoogleApiClient();
         checkPermission();
+        fab_go = findViewById(R.id.fab_go);
+        layout_go = findViewById(R.id.layout_go);
+        btn_ok_go = findViewById(R.id.btn_ok_go);
+        fab_go_point = findViewById(R.id.fab_go_point);
+
+        fab_go_point.setVisibility(View.GONE);
+        layout_go.setVisibility(View.GONE);
+
+
         mAutocompleteView = findViewById(R.id.autocomplete_tv);
 
         mAutoCompleteAdapter = new AT_Adapter(this, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
         handleSearch();
+        handleGetPoint();
+
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
 
 
+    }
+
+    private void handleGetPoint() {
+        fab_go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fab_go.setVisibility(View.GONE);
+                mAutocompleteView.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.GONE);
+
+
+                fab_go_point.setVisibility(View.VISIBLE);
+                layout_go.setVisibility(View.VISIBLE);
+
+
+            }
+        });
+
+        btn_ok_go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fab_go.setVisibility(View.VISIBLE);
+                mAutocompleteView.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+
+
+                fab_go_point.setVisibility(View.GONE);
+                layout_go.setVisibility(View.GONE);
+
+
+                LatLng latlng = mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
+                Log.e(TAG, latlng.latitude+" --- "+latlng.longitude);
+
+                Toast.makeText(getApplicationContext(),latlng.latitude+" --- "+latlng.longitude, Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
     }
 
     private void handleSearch() {
@@ -173,7 +228,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             public void onResult(PlaceBuffer places) {
                                 if (places.getCount() == 1) {
                                     //Do the things here on Click.....
-                                    LatLng latLng =places.get(0).getLatLng();
+                                    LatLng latLng = places.get(0).getLatLng();
 
                                     MarkerOptions markerOptions = new MarkerOptions();
                                     markerOptions.position(latLng);
@@ -204,8 +259,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
 
-        if(mGoogleApiClient.isConnected()){
-            Log.v("Google API","Dis-Connecting");
+        if (mGoogleApiClient.isConnected()) {
+            Log.v("Google API", "Dis-Connecting");
             mGoogleApiClient.disconnect();
         }
     }
@@ -213,8 +268,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onResume() {
         super.onResume();
-        if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()){
-            Log.v("Google API","Connecting");
+        if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+            Log.v("Google API", "Connecting");
             mGoogleApiClient.connect();
         }
 
@@ -295,8 +350,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addApi(Places.GEO_DATA_API)
                 .build();
     }
-
-
 
 
     private void checkPermission() {
