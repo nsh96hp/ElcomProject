@@ -172,9 +172,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
                 LatLng latlng = mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
-                Log.e(TAG, latlng.latitude+" --- "+latlng.longitude);
+                Log.e(TAG, latlng.latitude + " --- " + latlng.longitude);
 
-                Toast.makeText(getApplicationContext(),latlng.latitude+" --- "+latlng.longitude, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), latlng.latitude + " --- " + latlng.longitude, Toast.LENGTH_SHORT).show();
 
 
             }
